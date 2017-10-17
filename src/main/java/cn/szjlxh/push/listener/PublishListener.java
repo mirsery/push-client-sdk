@@ -13,16 +13,17 @@ public class PublishListener {
 
     private Callback callback;
     private int id;
+    private Timeout timeout;
 
     public PublishListener(final Callback callback, int msgId, long timeOut) {
 
         this.callback = callback;
         this.id = msgId;
 
-        SchedulerTaskFactory.processTask(new TimerTask() {
+        this.timeout = SchedulerTaskFactory.processTask(new TimerTask() {
             @Override
             public void run(Timeout timeout) throws Exception {
-                Callback timeOutCall = PublishUtil.getCallBack(id);
+                Callback timeOutCall = getCallback();
                 ResponseMsg responseMsg = new ResponseMsg();
                 responseMsg.setId(id);
                 responseMsg.setMsg("请求超时");
@@ -31,6 +32,12 @@ public class PublishListener {
                 PublishUtil.removeCallBack(id);
             }
         }, timeOut, TimeUnit.SECONDS);
+
+    }
+
+    public boolean canelTimeOut(){
+
+        return timeout.cancel();
     }
 
     public Callback getCallback() {

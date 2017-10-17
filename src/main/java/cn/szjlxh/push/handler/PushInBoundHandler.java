@@ -27,8 +27,12 @@ public class PushInBoundHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf byteBuf = (ByteBuf) msg;
         String message = byteBuf.toString(CharsetUtil.UTF_8);
+
+//        System.out.println(message);
+
         ResponseMsg responseMsg = gson.fromJson(message, ResponseMsg.class);
         Callback callback = PublishUtil.getCallBack(responseMsg.getId());
+
         if (callback != null) {
             if ("200".equals(responseMsg.getStatus())) {
                 callback.onSuccess(responseMsg);

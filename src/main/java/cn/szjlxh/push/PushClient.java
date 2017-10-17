@@ -2,7 +2,7 @@ package cn.szjlxh.push;
 
 import cn.szjlxh.push.listener.Callback;
 import cn.szjlxh.push.listener.PublishListener;
-import cn.szjlxh.push.listener.PushClientInitializer;
+import cn.szjlxh.push.handler.PushClientInitializer;
 import cn.szjlxh.push.message.PushMsg;
 import cn.szjlxh.push.util.PublishUtil;
 import io.netty.bootstrap.Bootstrap;
@@ -110,7 +110,7 @@ public class PushClient {
         executorService.submit(new Runnable() {
             @Override
             public void run() {
-                channel.writeAndFlush("#" + msg + "#");
+                channel.writeAndFlush(msg);
                 PublishUtil.addPublishList(new PublishListener(callback, msgId,timeOut));
             }
         });

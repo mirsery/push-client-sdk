@@ -18,14 +18,19 @@ public class PublishUtil {
         return msgId;
     }
 
-    private static ConcurrentHashMap<Integer, Callback> publishListenerConcurrentHashMap = new ConcurrentHashMap<Integer, Callback>();
+    private static ConcurrentHashMap<Integer, PublishListener> publishListenerConcurrentHashMap = new ConcurrentHashMap<Integer, PublishListener>();
 
     public static void addPublishList(PublishListener publishListener) {
-        publishListenerConcurrentHashMap.put(publishListener.getId(),publishListener.getCallback());
+        publishListenerConcurrentHashMap.put(publishListener.getId(),publishListener);
     }
 
     public static Callback getCallBack(int i) {
-        return publishListenerConcurrentHashMap.get(i);
+        PublishListener publishListener = publishListenerConcurrentHashMap.get(i);
+        if(publishListener != null){
+            publishListener.canelTimeOut();
+            return publishListener.getCallback();
+        }
+        return null;
     }
 
     public static void removeCallBack(int i) {
