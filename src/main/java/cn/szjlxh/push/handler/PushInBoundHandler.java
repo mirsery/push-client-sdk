@@ -28,7 +28,11 @@ public class PushInBoundHandler extends ChannelInboundHandlerAdapter {
         ByteBuf byteBuf = (ByteBuf) msg;
         String message = byteBuf.toString(CharsetUtil.UTF_8);
 
+        if ("".equals(message) || message == null)
+            return;
+
         ResponseMsg responseMsg = gson.fromJson(message, ResponseMsg.class);
+
         Callback callback = PublishUtil.getCallBack(responseMsg.getId());
 
         if (callback != null) {
