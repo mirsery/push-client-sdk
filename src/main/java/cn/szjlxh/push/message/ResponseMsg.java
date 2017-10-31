@@ -31,6 +31,6 @@ public class ResponseMsg {
 
     @Override
     public String toString() {
-        return "{status:" + status + ",id:" + id + ",msg:" + msg + "}";
+        return "{\"status\":" + status + ",\"id\":" + id + ",\"msg\":\"" + msg + "\"}";
     }
 }

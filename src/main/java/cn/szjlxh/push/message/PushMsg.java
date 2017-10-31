@@ -5,6 +5,11 @@ public class PushMsg {
     private String data;
     private int id;
 
+    public PushMsg(String channelId, String data) {
+        this.channelId = channelId;
+        this.data = data;
+    }
+
     public int getId() {
         return id;
     }
@@ -31,6 +36,6 @@ public class PushMsg {
 
     @Override
     public String toString() {
-        return "{\"id\":" + id + ",\"channelId\":\"" + channelId + "\",\"data\":\"" + data + "\"}";
+        return "{\"id\":" + id + ",\"channelId\":\"" + channelId + "\",\"data\":" + data + "}";
     }
 }
