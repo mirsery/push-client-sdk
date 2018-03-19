@@ -3,8 +3,13 @@ package cn.szjlxh.push;
 import cn.szjlxh.push.listener.Callback;
 import cn.szjlxh.push.listener.PublishListener;
 import cn.szjlxh.push.handler.PushClientInitializer;
+import cn.szjlxh.push.message.PushMsgSerializer;
 import cn.szjlxh.push.message.PushMsg;
+import cn.szjlxh.push.util.BasicTask;
 import cn.szjlxh.push.util.PublishUtil;
+import cn.szjlxh.push.util.SchedulerTaskFactory;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -31,6 +36,8 @@ public class PushClient {
     private static Channel channel;
     private static long timeOut;
 
+    private static Gson gson = new GsonBuilder().registerTypeAdapter(PushMsg.class, new PushMsgSerializer()).create();
+
     private ChannelInitializer channelInitializer;
 
     public PushClient(final String url, final int port, long timeOut) {
@@ -55,6 +62,12 @@ public class PushClient {
             public void operationComplete(ChannelFuture channelFuture) throws Exception {
                 if (future.isSuccess()) {
                     channel = channelFuture.channel();
+                    SchedulerTaskFactory.createTask(new BasicTask() {
+                        @Override
+                        protected void task() {
+                            channel.writeAndFlush("{\"type\":1}");
+                        }
+                    }, 5, TimeUnit.MINUTES);
                     log.info("push-client connect to server " + url + " at port: {} is ok !", port);
                 } else {
                     log.info("push-client connect to server " + url + " at port: {} is failed !", port);
@@ -110,8 +123,13 @@ public class PushClient {
         executorService.submit(new Runnable() {
             @Override
             public void run() {
-                channel.writeAndFlush(msg);
-                PublishUtil.addPublishList(new PublishListener(callback, msgId,timeOut));
+                try {
+                    String message = gson.toJson(msg);
+                    channel.writeAndFlush(message);
+                    PublishUtil.addPublishList(new PublishListener(callback, msgId, timeOut));
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
             }
         });
     }

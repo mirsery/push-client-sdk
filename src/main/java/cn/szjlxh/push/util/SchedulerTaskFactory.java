@@ -21,7 +21,14 @@ public class SchedulerTaskFactory {
     }
 
     public static Timeout processTask(TimerTask task, long delay, TimeUnit timeUnit) {
-        return getInstance().newTimeout(task,delay,timeUnit);
+        return getInstance().newTimeout(task, delay, timeUnit);
     }
+
+    public static Timeout createTask(BasicTask task, long delay, TimeUnit timeUnit) {
+        task.setDelay(delay);
+        task.setTimeUnit(timeUnit);
+        return getInstance().newTimeout(task, delay, timeUnit);
+    }
+
 
 }
