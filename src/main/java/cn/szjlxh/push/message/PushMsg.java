@@ -1,12 +1,15 @@
 package cn.szjlxh.push.message;
 
-import com.google.gson.JsonObject;
-
 public class PushMsg {
     private String channelId;
     private int type = 2;
-    private JsonObject data;
+    private Object data;
     private int id;
+
+    public PushMsg(String channelId, Object data) {
+        this.channelId = channelId;
+        this.data = data;
+    }
 
     public int getId() {
         return id;
@@ -24,11 +27,11 @@ public class PushMsg {
         this.channelId = channelId;
     }
 
-    public JsonObject getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(JsonObject data) {
+    public void setData(Object data) {
         this.data = data;
     }
 
