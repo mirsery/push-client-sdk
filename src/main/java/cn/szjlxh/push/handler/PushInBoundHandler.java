@@ -28,6 +28,8 @@ public class PushInBoundHandler extends ChannelInboundHandlerAdapter {
         ByteBuf byteBuf = (ByteBuf) msg;
         String message = byteBuf.toString(CharsetUtil.UTF_8);
 
+        log.info("receive the message " + message);
+
         if ("".equals(message) || message == null)
             return;
 
