@@ -3,10 +3,10 @@ package cn.szjlxh.push.message;
 public class PushMsg {
     private String channelId;
     private int type = 2;
-    private Object data;
+    private PushMessage data;
     private int id;
 
-    public PushMsg(String channelId, Object data) {
+    public PushMsg(String channelId, PushMessage data) {
         this.channelId = channelId;
         this.data = data;
     }
@@ -27,11 +27,11 @@ public class PushMsg {
         this.channelId = channelId;
     }
 
-    public Object getData() {
+    public PushMessage getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(PushMessage data) {
         this.data = data;
     }
 
