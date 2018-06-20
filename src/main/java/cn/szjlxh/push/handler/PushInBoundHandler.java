@@ -30,7 +30,7 @@ public class PushInBoundHandler extends ChannelInboundHandlerAdapter {
 
         log.info("receive the message " + message);
 
-        if ("".equals(message) || message == null)
+        if ("".equals(message) || message == null || message.equals("\"\""))
             return;
 
         ResponseMsg responseMsg = gson.fromJson(message, ResponseMsg.class);
